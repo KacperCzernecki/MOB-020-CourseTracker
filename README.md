@@ -36,19 +36,19 @@ flutter pub get
 
 ## Instalacja i uruchomienie
 
-1. Zainstaluj Flutter SDK zgodnie z [oficjalną dokumentacją](https://docs.flutter.dev/install)
-2. Zainstaluj Git oraz edytor kodu
-3. Przygotuj narzędzia wybranej platformy
-   - **Android:** zainstaluj Android Studio, wymagane komponenty Android SDK oraz skonfiguruj emulator lub podłącz urządzenie fizyczne
-   - **iOS:** na komputerze z systemem macOS zainstaluj Xcode i Xcode Command Line Tools, a następnie skonfiguruj iOS Simulator lub podłącz iPhone’a.
-4. Sprawdź konfigurację i pobierz zależności projektu
-5. **Uruchomienie aplikacji**
-   _ Uruchom emulator wybranej platformy lub podłącz fizyczne urządzenie
-   _ Sprawdź czy flutter wykrywa urządzenie
-   `     flutter devices
-    ` \* Uruchom aplikację wykonując w katalogu projektu:
-   `     flutter run
-    `
-   Flutter uruchomi aplikację na dostępnym urządzeniu. Jeśli podłączonych jest kilka urządzeń, wybierz właściwe zgodnie z komunikatem w terminalu lub wskaż je parametrem -d
+1.  Zainstaluj Flutter SDK zgodnie z [oficjalną dokumentacją](https://docs.flutter.dev/install)
+2.  Zainstaluj Git oraz edytor kodu
+3.  Przygotuj narzędzia wybranej platformy
+    - **Android:** zainstaluj Android Studio, wymagane komponenty Android SDK oraz skonfiguruj emulator lub podłącz urządzenie fizyczne
+    - **iOS:** na komputerze z systemem macOS zainstaluj Xcode i Xcode Command Line Tools, a następnie skonfiguruj iOS Simulator lub podłącz iPhone’a.
+4.  Sprawdź konfigurację i pobierz zależności projektu
+5.  **Uruchomienie aplikacji**
+    _ Uruchom emulator wybranej platformy lub podłącz fizyczne urządzenie
+    _ Sprawdź czy flutter wykrywa urządzenie:
+    `flutter devices`
+    - Uruchom aplikację wykonując w katalogu projektu:
+      `flutter run`
+
+Flutter uruchomi aplikację na dostępnym urządzeniu. Jeśli podłączonych jest kilka urządzeń, wybierz właściwe zgodnie z komunikatem w terminalu lub wskaż je parametrem -d
 
 **UWAGA:** uruchamianie aplikacji na iOS wymaga komputera z systemem macOS i zainstalowanego Xcode. Aplikację na Androida można uruchomić na obsługiwanym systemie Windows, macOS lub Linux, po skonfigurowaniu Android SDK
