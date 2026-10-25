@@ -51,4 +51,4 @@ flutter pub get
     `
    Flutter uruchomi aplikację na dostępnym urządzeniu. Jeśli podłączonych jest kilka urządzeń, wybierz właściwe zgodnie z komunikatem w terminalu lub wskaż je parametrem -d
 
-<span style="color:red; font-weight: bold;">UWAGA:</span> uruchamianie aplikacji na iOS wymaga komputera z systemem macOS i zainstalowanego Xcode. Aplikację na Androida można uruchomić na obsługiwanym systemie Windows, macOS lub Linux, po skonfigurowaniu Android SDK
+**UWAGA:** uruchamianie aplikacji na iOS wymaga komputera z systemem macOS i zainstalowanego Xcode. Aplikację na Androida można uruchomić na obsługiwanym systemie Windows, macOS lub Linux, po skonfigurowaniu Android SDK
