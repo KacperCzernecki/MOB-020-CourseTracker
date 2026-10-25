@@ -43,9 +43,9 @@ flutter pub get
     - **iOS:** na komputerze z systemem macOS zainstaluj Xcode i Xcode Command Line Tools, a następnie skonfiguruj iOS Simulator lub podłącz iPhone’a.
 4.  Sprawdź konfigurację i pobierz zależności projektu
 5.  **Uruchomienie aplikacji**
-    _ Uruchom emulator wybranej platformy lub podłącz fizyczne urządzenie
-    _ Sprawdź czy flutter wykrywa urządzenie:
-    `flutter devices`
+    - Uruchom emulator wybranej platformy lub podłącz fizyczne urządzenie
+    - Sprawdź czy flutter wykrywa urządzenie:
+      `flutter devices`
     - Uruchom aplikację wykonując w katalogu projektu:
       `flutter run`
 
