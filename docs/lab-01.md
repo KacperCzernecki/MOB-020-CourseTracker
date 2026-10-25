@@ -2,11 +2,12 @@
 
 **Przedmiot:** Budowa aplikacji mobilnych z użyciem technologii frontendowych  
 **Semestr:** 7, studia I stopnia  
-**Forma:** indywidualne ćwiczenia, dyskusja, praca nad projektem semestralnym 
+**Forma:** indywidualne ćwiczenia, dyskusja, praca nad projektem semestralnym
 
 ## 1. Cele i rezultaty
 
 Po laboratorium student:
+
 1. Wyjaśnia różnice między React Native, Flutter i NativeScript, w tym język, model UI, dostęp do API platform i narzędzia.
 2. Porównuje technologie według wymagań funkcjonalnych i niefunkcjonalnych, bez arbitralnego rankingu „najlepszy framework”.
 3. Uzasadnia wybór jednego frameworka do indywidualnego projektu MOB-001–MOB-050.
@@ -15,7 +16,6 @@ Po laboratorium student:
 6. Dokumentuje wykonane działania oraz napotkane problemy w sprawozdaniu.
 
 **Warunek wejściowy:** otrzymana indywidualna karta biznesowa i wspólne `requirements.md` oraz `CONTRIBUTING.md`. Przed zajęciami zaleca się zainstalowanie Git, edytora i narzędzi wymaganych przez wybraną platformę. Instalacja Android SDK/Xcode może potrwać dłużej niż laboratorium.
-
 
 ## 2. Zagadnienia do przygotowania
 
@@ -33,6 +33,7 @@ Utwórz `docs/technology-comparison.md` i porównaj wszystkie trzy technologie.
 **Obowiązkowe kryteria:** język, sposób tworzenia/renderowania UI, dostęp do natywnych API, wsparcie Android/iOS, narzędzia, testowanie, ekosystem, ograniczenia. Dla każdego kryterium podaj krótkie uzasadnienie, a nie tylko ocenę 1–5. Zaznacz, co jest faktem potwierdzonym w dokumentacji, a co własną oceną.
 
 **Pytania kontrolne:**
+
 1. Dlaczego React Native nie jest tym samym co aplikacja webowa w WebView?
 2. Czym różni się podejście Fluttera do interfejsu od React Native?
 3. Co oznacza dostęp do natywnego API w NativeScript?
@@ -58,11 +59,17 @@ Do sprawozdania wpisz: wybrany framework, dwa argumenty za, jedno ryzyko oraz wa
 
 ```md
 # ADR-001: Wybór frameworka
+
 ## Kontekst i wymagania
+
 ## Rozważone alternatywy
+
 ## Decyzja
+
 ## Uzasadnienie (co najmniej 3 argumenty)
+
 ## Konsekwencje i ryzyka (co najmniej 2)
+
 ## Warunki ponownego rozpatrzenia decyzji
 ```
 
@@ -77,6 +84,7 @@ Wybierz instrukcję oficjalną odpowiednią dla technologii:
 - NativeScript: https://docs.nativescript.org/setup/.
 
 **Kroki wspólne:**
+
 1. Sprawdź wersje Git, runtime/SDK i narzędzi wymaganych przez wybraną technologię.
 2. Utwórz nowy projekt zgodnie z oficjalną instrukcją (nie kopiuj gotowej aplikacji CRUD).
 3. Uruchom aplikację na Androidzie **lub** iOS, w emulatorze/symulatorze lub na urządzeniu.
@@ -129,21 +137,21 @@ Przed `git push` skonfiguruj repozytorium zdalne (`git remote add origin ...`) i
 
 ## 9. Ocena — 10 punktów
 
-| Obszar | Punkty |
-|---|---:|
-| Porównanie frameworków: trafność i źródła | 2 |
-| Decyzja technologiczna (ADR): zgodność z wymaganiami i argumentacja | 2 |
-| Środowisko, uruchomienie i powtarzalna instrukcja | 2 |
-| Git: Issue, gałąź, PR, historia | 2 |
-| Sprawozdanie: forma, dowody, problemy, wnioski | 2 |
-| **Razem** | **10** |
+| Obszar                                                              | Punkty |
+| ------------------------------------------------------------------- | -----: |
+| Porównanie frameworków: trafność i źródła                           |      2 |
+| Decyzja technologiczna (ADR): zgodność z wymaganiami i argumentacja |      2 |
+| Środowisko, uruchomienie i powtarzalna instrukcja                   |      2 |
+| Git: Issue, gałąź, PR, historia                                     |      2 |
+| Sprawozdanie: forma, dowody, problemy, wnioski                      |      2 |
+| **Razem**                                                           | **10** |
 
 **Samodzielność:** na prośbę prowadzącego student wyjaśnia fragment konfiguracji, decyzję lub historię zmian. Korzystanie z AI dokumentuje zgodnie ze wspólnymi zasadami projektu; nie zastępuje ono samodzielnej weryfikacji.
 
 ## 11. Lista kontrolna
 
-- [ ] Porównałem(-am) trzy technologie na podstawie źródeł.
-- [ ] Powiązałem(-am) wybór frameworka z wymaganiami MOB-XXX.
+- [x] Porównałem(-am) trzy technologie na podstawie źródeł.
+- [x] Powiązałem(-am) wybór frameworka z wymaganiami MOB-XXX.
 - [ ] Uruchomiłem(-am) aplikację na docelowej platformie.
 - [ ] Udokumentowałem(-am) instalację i uruchomienie.
 - [ ] Utworzyłem(-am) Issue, gałąź i scalony PR.
