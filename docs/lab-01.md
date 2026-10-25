@@ -152,7 +152,7 @@ Przed `git push` skonfiguruj repozytorium zdalne (`git remote add origin ...`) i
 
 - [x] Porównałem(-am) trzy technologie na podstawie źródeł.
 - [x] Powiązałem(-am) wybór frameworka z wymaganiami MOB-XXX.
-- [ ] Uruchomiłem(-am) aplikację na docelowej platformie.
-- [ ] Udokumentowałem(-am) instalację i uruchomienie.
-- [ ] Utworzyłem(-am) Issue, gałąź i scalony PR.
-- [ ] Oddałem(-am) sprawozdanie z dowodami i wnioskami.
+- [x] Uruchomiłem(-am) aplikację na docelowej platformie.
+- [x] Udokumentowałem(-am) instalację i uruchomienie.
+- [x] Utworzyłem(-am) Issue, gałąź i scalony PR.
+- [x] Oddałem(-am) sprawozdanie z dowodami i wnioskami.
