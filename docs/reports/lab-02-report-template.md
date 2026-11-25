@@ -2,7 +2,7 @@
 
 **Przedmiot:** Budowa aplikacji mobilnych z użyciem technologii frontendowych  
 **Student / identyfikator: Kacper Czernecki / 147482**  
-**Projekt biznesowy: MOB-[20] — [CourseTracker]**
+**Projekt biznesowy: MOB-[020] — [CourseTracker]**
 **Framework: [Flutter]**  
 **Data zajęć: [2026-11-05]**  
 **Repozytorium: [odnośnik](https://github.com/KacperCzernecki/MOB-020-CourseTracker)**  
@@ -136,10 +136,10 @@ flowchart TD
 
 Zdefiniuj co najmniej dwie powiązane encje wynikające z indywidualnych wymagań biznesowych.
 
-| Encja     | Pole | Typ    | Wymagane | Znaczenie |
-| --------- | ---- | ------ | -------- | --------- |
-| Kurs | id | UUID | Tak      | Unikalny identyfikator kursu    |
-| Moduł | parentId | UUID | Tak      | 	Identyfikator kursu, do którego przypisany jest moduł    |
+| Encja | Pole     | Typ  | Wymagane | Znaczenie                                             |
+| ----- | -------- | ---- | -------- | ----------------------------------------------------- |
+| Kurs  | id       | UUID | Tak      | Unikalny identyfikator kursu                          |
+| Moduł | parentId | UUID | Tak      | Identyfikator kursu, do którego przypisany jest moduł |
 
 **Relacja i sposób zapewnienia spójności (np. usuwanie encji nadrzędnej):**
 
@@ -164,17 +164,18 @@ erDiagram
 
 
 ```
-* PK - Primary key
-* FK - Foreign key
+
+- PK - Primary key
+- FK - Foreign key
 
 ### T2.3. Decyzje projektowe
 
-| Decyzja                | Wybrane rozwiązanie | Alternatywa | Uzasadnienie |
-| ---------------------- | ------------------- | ----------- | ------------ |
-| Zarządzanie stanem     | StatefulSidget                | Provider, Riverpod         | Aplikacja ma niewielki zakres więc wbudowane zarządzanie stanem wystarczy        |
-| Przechowywanie danych  | sqflite                 |      Hive    |    Dane są relacyjne: jeden kurs może mieć wiele modułów       |
-| Nawigacja              | Navigator + MaterialPageRoute                 | Autoroute         | Aplikacja ma prostą strukturę ekranów, więc natywna nawigacja Fluttera jest wystarczająca          |
-| Separacja logiki od UI | Services                 | Bloc         | Oddzielenie modeli i operacji bazodanowych od ekranów ułatwi utrzymanie i testowanie aplikacji          |
+| Decyzja                | Wybrane rozwiązanie           | Alternatywa        | Uzasadnienie                                                                                   |
+| ---------------------- | ----------------------------- | ------------------ | ---------------------------------------------------------------------------------------------- |
+| Zarządzanie stanem     | StatefulSidget                | Provider, Riverpod | Aplikacja ma niewielki zakres więc wbudowane zarządzanie stanem wystarczy                      |
+| Przechowywanie danych  | sqflite                       | Hive               | Dane są relacyjne: jeden kurs może mieć wiele modułów                                          |
+| Nawigacja              | Navigator + MaterialPageRoute | Autoroute          | Aplikacja ma prostą strukturę ekranów, więc natywna nawigacja Fluttera jest wystarczająca      |
+| Separacja logiki od UI | Services                      | Bloc               | Oddzielenie modeli i operacji bazodanowych od ekranów ułatwi utrzymanie i testowanie aplikacji |
 
 **Plik `docs/architecture.md`:** [link do pliku](../architecture.md)
 
@@ -192,11 +193,11 @@ Zaimplementuj minimum trzy ekrany:
 
 [diagram / opis]
 
-| Ekran     | Plik / komponent | Przejście do / z ekranu | Dowód działania |
-| --------- | ---------------- | ----------------------- | --------------- |
-| Lista     | widgets/course_list.dart              | Ekran główny aplikacji                     | ![HomePage](../screenshots/homepage.png)         |
-| Szczegóły | screens/course_details_screen.dart              | Szczegóły kursu / Ekran główny                      | ![CourseDetail](../screenshots/coursedetail.png)         |
-| Formularz | screens/add_course_screen.dart              | Formularz dodawania kursu / Ekran główny                     | ![CourseForm](../screenshots/courseform.png)       |
+| Ekran     | Plik / komponent                   | Przejście do / z ekranu                  | Dowód działania                                  |
+| --------- | ---------------------------------- | ---------------------------------------- | ------------------------------------------------ |
+| Lista     | widgets/course_list.dart           | Ekran główny aplikacji                   | ![HomePage](../screenshots/homepage.png)         |
+| Szczegóły | screens/course_details_screen.dart | Szczegóły kursu / Ekran główny           | ![CourseDetail](../screenshots/coursedetail.png) |
+| Formularz | screens/add_course_screen.dart     | Formularz dodawania kursu / Ekran główny | ![CourseForm](../screenshots/courseform.png)     |
 
 **Dlaczego taki układ nawigacji jest odpowiedni dla użytkownika?**
 
@@ -214,13 +215,13 @@ Zaimplementuj:
 - odczyt i wyświetlenie listy rekordów;
 - otwarcie szczegółów wybranego rekordu.
 
-**Powiązanie z wymaganiami biznesowymi (ID wymagań):** 
+**Powiązanie z wymaganiami biznesowymi (ID wymagań):**
 
-| Operacja         | Lokalizacja kodu | Reguła walidacji / zachowanie | Wynik |
-| ---------------- | ---------------- | ----------------------------- | ----- |
-| Create           | `screens/add_course_screen.dart`, `main.dart`, `services/database_service.dart`              | Wymagana nazwa kursu i jego źródło - ID generowane jako UUI v4. Dane zapisywane w tabeli `courses `                          | Kurs zostaje zapisany w SQLite i pojawia się na liście   |
-| Read (lista)     | `main.dart`, `widgets/course_list.dart`,`services/database_service.dart`              | Pobierane są wszystkie kursy z tabeli `courses` podczas uruchamiania aplikacji                           | Lista kursów wyświetla zapisane dane, również po ponownym uruchomieniu aplikacji   |
-| Read (szczegóły) | `screens/course_details_screen.dart`, `main.dart`             | Po wybraniu kursu przekazywany jest jego obiekt do ekranu szczegółów                          | Wyświetlana jest nazwa i źródło wybranego kursu   |
+| Operacja         | Lokalizacja kodu                                                                | Reguła walidacji / zachowanie                                                                       | Wynik                                                                            |
+| ---------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Create           | `screens/add_course_screen.dart`, `main.dart`, `services/database_service.dart` | Wymagana nazwa kursu i jego źródło - ID generowane jako UUI v4. Dane zapisywane w tabeli `courses ` | Kurs zostaje zapisany w SQLite i pojawia się na liście                           |
+| Read (lista)     | `main.dart`, `widgets/course_list.dart`,`services/database_service.dart`        | Pobierane są wszystkie kursy z tabeli `courses` podczas uruchamiania aplikacji                      | Lista kursów wyświetla zapisane dane, również po ponownym uruchomieniu aplikacji |
+| Read (szczegóły) | `screens/course_details_screen.dart`, `main.dart`                               | Po wybraniu kursu przekazywany jest jego obiekt do ekranu szczegółów                                | Wyświetlana jest nazwa i źródło wybranego kursu                                  |
 
 **Wyjaśnij przepływ danych po naciśnięciu przycisku „Zapisz”:**
 
@@ -236,13 +237,13 @@ Zaimplementuj:
 
 Przeprowadź testy manualne i podaj rzeczywiste wyniki.
 
-| ID    | Scenariusz                           | Oczekiwany rezultat             | Wynik (PASS/FAIL) | Dowód / uwagi |
-| ----- | ------------------------------------ | ------------------------------- | ----------------- | ------------- |
-| TC-01 | Dodanie poprawnego rekordu           | Rekord jest zapisany i widoczny | PASS               |    ![Homepage](../screenshots/homepage.png)         |
-| TC-02 | Próba zapisu pustego wymaganego pola | Zapis zablokowany, komunikat    | PASS               | ![Empty Form](../screenshots/emptyform.png)           |
-| TC-03 | Otwarcie szczegółów rekordu          | Poprawne dane rekordu           | PASS               | Nie zaimplementowano opcji dodawania modułów więc widać tylko title i source           |
-| TC-04 | Ponowne uruchomienie aplikacji       | Rekord pozostaje dostępny       | PASS               | Wymagało zaimplementowanie biblioteki `sqflite` i `uuid`           |
-| TC-05 | Brak rekordów                        | Czytelny stan pustej listy      | PASS               | Pokazano na przykładzie braku modułów           |
+| ID    | Scenariusz                           | Oczekiwany rezultat             | Wynik (PASS/FAIL) | Dowód / uwagi                                                                |
+| ----- | ------------------------------------ | ------------------------------- | ----------------- | ---------------------------------------------------------------------------- |
+| TC-01 | Dodanie poprawnego rekordu           | Rekord jest zapisany i widoczny | PASS              | ![Homepage](../screenshots/homepage.png)                                     |
+| TC-02 | Próba zapisu pustego wymaganego pola | Zapis zablokowany, komunikat    | PASS              | ![Empty Form](../screenshots/emptyform.png)                                  |
+| TC-03 | Otwarcie szczegółów rekordu          | Poprawne dane rekordu           | PASS              | Nie zaimplementowano opcji dodawania modułów więc widać tylko title i source |
+| TC-04 | Ponowne uruchomienie aplikacji       | Rekord pozostaje dostępny       | PASS              | Wymagało zaimplementowanie biblioteki `sqflite` i `uuid`                     |
+| TC-05 | Brak rekordów                        | Czytelny stan pustej listy      | PASS              | Pokazano na przykładzie braku modułów                                        |
 
 **Najważniejszy napotkany problem i sposób rozwiązania:**
 
@@ -267,10 +268,11 @@ Podczas implementacji aplikacji CourseTracker stworzyłem podstawową strukturę
 ## Użycie narzędzi AI (jeżeli dotyczy)
 
 **Narzędzie i zakres wsparcia:**
-* **[Chat GPT](https://chatgpt.com/)** - Pomoc w weryfikowaniu kodu (syntaxu, literówek), pomoc przy weryfikacji sprawozdania oraz raportu 
 
-**Jak zweryfikowano wynik:**   Samodzielnie przeczytano każdą odpowiedź oraz zweryfikowano za pomocą dostępnych dokumentacji
+- **[Chat GPT](https://chatgpt.com/)** - Pomoc w weryfikowaniu kodu (syntaxu, literówek), pomoc przy weryfikacji sprawozdania oraz raportu
 
-**Elementy wykonane samodzielnie:** Samodzielnie odpowiadałem za pełny cykl wytwarzania oprogramowania: implementację funkcjonalności, zarządzanie wersjami kodu , tworzenie commitów, pobieranie i scalanie zmian, testowanie oraz obsługę i rozwiązywanie zgłoszeń 
+**Jak zweryfikowano wynik:** Samodzielnie przeczytano każdą odpowiedź oraz zweryfikowano za pomocą dostępnych dokumentacji
+
+**Elementy wykonane samodzielnie:** Samodzielnie odpowiadałem za pełny cykl wytwarzania oprogramowania: implementację funkcjonalności, zarządzanie wersjami kodu , tworzenie commitów, pobieranie i scalanie zmian, testowanie oraz obsługę i rozwiązywanie zgłoszeń
 
 **Warunki formalne:** sprawozdanie w Markdown, czytelne odnośniki do działającego kodu i diagramów, zrzuty ekranu renderujące się w repozytorium, identyfikacja autora i projektu. Oceniana jest zarówno implementacja, jak i zdolność wyjaśnienia własnych decyzji. Brak dowodów wykonania może ograniczyć liczbę punktów.
