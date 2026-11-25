@@ -5,7 +5,8 @@ import '../models/course.dart';
 import 'package:uuid/uuid.dart';
 
 class AddCourseScreen extends StatefulWidget {
-  const AddCourseScreen({super.key});
+  final Course? course;
+  const AddCourseScreen({super.key, this.course});
   @override
   State<AddCourseScreen> createState() => _AddCourseScreenState();
 }
@@ -24,9 +25,22 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.course != null) {
+      _nameController.text = widget.course!.name;
+      _sourceController.text = widget.course!.source;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Dodaj kurs")),
+      appBar: AppBar(
+        title: widget.course == null
+            ? const Text("Dodaj kurs")
+            : const Text("Edytuj kurs"),
+      ),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -63,7 +77,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
 
                   if (_formKey.currentState!.validate()) {
                     final newCourse = Course(
-                      id: _uuid.v4(),
+                      id: widget.course?.id ?? _uuid.v4(),
                       name: name,
                       source: source,
                     );

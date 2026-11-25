@@ -57,7 +57,19 @@ class _HomeScreenState extends State<HomeScreen> {
         onCourseTap: (course) => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CourseDetailsScreen(course: course),
+            builder: (context) => CourseDetailsScreen(
+              course: course,
+              onCourseUpdate: (updatedCourse) {
+                final index = courses.indexWhere(
+                  (item) => item.id == updatedCourse.id,
+                );
+                if (index != -1) {
+                  setState(() {
+                    courses[index] = updatedCourse;
+                  });
+                }
+              },
+            ),
           ),
         ),
       ),

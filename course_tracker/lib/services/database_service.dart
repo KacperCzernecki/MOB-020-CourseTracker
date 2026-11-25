@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:course_tracker/models/module.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -100,6 +102,18 @@ class DatabaseService {
     }).toList();
   }
 
+  Future<int> updateCourse(Course course) async {
+    final db = await getDatabase();
+
+    final updated = await db.update(
+      'courses',
+      {"name": course.name, "source": course.source},
+      where: 'id = ?',
+      whereArgs: [course.id],
+    );
+    return updated;
+  }
+
   Future<void> updateModule(String moduleId, bool isCompleted) async {
     final db = await getDatabase();
 
@@ -109,6 +123,37 @@ class DatabaseService {
       where: 'id = ?',
       whereArgs: [moduleId],
     );
+  }
+
+  Future<bool> hasModules(String courseId) async {
+    final db = await getDatabase();
+
+    final query = await db.query(
+      'modules',
+      where: 'parent_id = ?',
+      whereArgs: [courseId],
+    );
+    return query.isNotEmpty;
+  }
+
+  Future<bool> deleteCourse(String courseId) async {
+    final db = await getDatabase();
+    if (!await hasModules(courseId)) {
+      final deleted = await db.delete(
+        'courses',
+        where: 'id = ?',
+        whereArgs: [courseId],
+      );
+      return deleted > 0;
+    } else {
+      return false;
+    }
+  }
+
+  Future<int> deleteModule(String moduleId) async {
+    final db = await getDatabase();
+
+    return await db.delete('modules', where: 'id = ?', whereArgs: [moduleId]);
   }
 
   Future<int> getLastNumber(String courseId) async {
@@ -122,11 +167,5 @@ class DatabaseService {
         .reduce((a, b) => a > b ? a : b);
 
     return lastOrder + 1;
-  }
-
-  Future<int> deleteModule(String moduleId) async {
-    final db = await getDatabase();
-
-    return await db.delete('modules', where: 'id = ?', whereArgs: [moduleId]);
   }
 }

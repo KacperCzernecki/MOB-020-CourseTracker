@@ -4,10 +4,16 @@ import "../models/course.dart";
 import "../models/module.dart";
 import '../services/database_service.dart';
 import 'add_module_screen.dart';
+import 'add_course_screen.dart';
 
 class CourseDetailsScreen extends StatefulWidget {
   final Course course;
-  const CourseDetailsScreen({super.key, required this.course});
+  final ValueChanged<Course> onCourseUpdate;
+  const CourseDetailsScreen({
+    super.key,
+    required this.course,
+    required this.onCourseUpdate,
+  });
   @override
   State<CourseDetailsScreen> createState() => _CourseDetailsScreenState();
 }
@@ -16,11 +22,13 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
   final DatabaseService _db = DatabaseService();
   List<Module> _modules = [];
   bool _isLoading = true;
+  late Course _course;
 
   @override
   void initState() {
     super.initState();
     _loadModules();
+    _course = widget.course;
   }
 
   Future<void> _loadModules() async {
@@ -48,6 +56,60 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
     }
   }
 
+  Future<void> _editCourse() async {
+    final course = await Navigator.push<Course>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddCourseScreen(course: widget.course),
+      ),
+    );
+    if (!mounted) return;
+    if (course != null) {
+      final updated = await _db.updateCourse(course);
+      if (updated == 0) {
+        return;
+      }
+      setState(() {
+        _course = course;
+      });
+      widget.onCourseUpdate(course);
+    }
+  }
+
+  Future<void> _deleteModule(String moduleId) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Usunąć moduł?"),
+          content: Text(
+            "Element zostanie trwale usunięty. Tej operacji nie można cofnąć",
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                "Anuluj",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text("Usuń", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed == true) {
+      await _db.deleteModule(moduleId);
+      if (!mounted) return;
+      await _loadModules();
+    } else {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,16 +119,16 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              widget.course.name,
+              _course.name,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Źródło: ${widget.course.source}',
+              'Źródło: ${_course.source}',
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
             ),
           ],
         ),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.edit))],
+        actions: [IconButton(onPressed: _editCourse, icon: Icon(Icons.edit))],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addModule,
@@ -125,10 +187,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      await _db.deleteModule(
-                                        _modules[index].id,
-                                      );
-                                      await _loadModules();
+                                      _deleteModule(_modules[index].id);
                                     },
                                     icon: const Icon(Icons.delete),
                                   ),
