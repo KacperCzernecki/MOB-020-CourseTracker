@@ -54,24 +54,31 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: const Text("CourseTracker")),
       body: CourseList(
         courses: courses,
-        onCourseTap: (course) => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CourseDetailsScreen(
-              course: course,
-              onCourseUpdate: (updatedCourse) {
-                final index = courses.indexWhere(
-                  (item) => item.id == updatedCourse.id,
-                );
-                if (index != -1) {
-                  setState(() {
-                    courses[index] = updatedCourse;
-                  });
-                }
-              },
+        onCourseTap: (course) async {
+          final deleted = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CourseDetailsScreen(
+                course: course,
+                onCourseUpdate: (updatedCourse) {
+                  final index = courses.indexWhere(
+                    (item) => item.id == updatedCourse.id,
+                  );
+                  if (index != -1) {
+                    setState(() {
+                      courses[index] = updatedCourse;
+                    });
+                  }
+                },
+              ),
             ),
-          ),
-        ),
+          );
+          if (deleted == true) {
+            setState(() {
+              courses.removeWhere((item) => item.id == course.id);
+            });
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

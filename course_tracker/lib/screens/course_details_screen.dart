@@ -110,6 +110,51 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
     }
   }
 
+  Future<void> _deleteCourse() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Usunąć kurs?"),
+          content: Text(
+            "Element zostanie trwale usunięty. Tej operacji nie można cofnąć",
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                "Anuluj",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text("Usuń", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed == true) {
+      final deleted = await _db.deleteCourse(_course.id);
+      if (!mounted) return;
+      if (!deleted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "Nie można usunąć kursu, ponieważ zawiera moduły.",
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        );
+      } else {
+        Navigator.pop(context, true);
+      }
+    } else {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,7 +173,10 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
             ),
           ],
         ),
-        actions: [IconButton(onPressed: _editCourse, icon: Icon(Icons.edit))],
+        actions: [
+          IconButton(onPressed: _editCourse, icon: Icon(Icons.edit)),
+          IconButton(onPressed: _deleteCourse, icon: Icon(Icons.delete)),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addModule,

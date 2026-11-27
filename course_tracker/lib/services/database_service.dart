@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:course_tracker/models/module.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
