@@ -22,6 +22,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
   final DatabaseService _db = DatabaseService();
   List<Module> _modules = [];
   bool _isLoading = true;
+  String? _errorMessage;
   late Course _course;
 
   @override
@@ -32,27 +33,54 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
   }
 
   Future<void> _loadModules() async {
-    final modules = await _db.getModules(widget.course.id);
-
     if (!mounted) return;
-
     setState(() {
-      _modules = modules;
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      final modules = await _db.getModules(widget.course.id);
+
+      if (!mounted) return;
+
+      setState(() {
+        _modules = modules;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = error.toString();
+      });
+    }
+    if (!mounted) return;
+    setState(() {
       _isLoading = false;
     });
   }
 
   Future<void> _addModule() async {
-    final module = await Navigator.push<Module>(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddModuleScreen(courseId: widget.course.id),
-      ),
-    );
-    if (!mounted) return;
-    if (module != null) {
-      await _db.insertModule(module);
-      await _loadModules();
+    try {
+      final module = await Navigator.push<Module>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddModuleScreen(courseId: widget.course.id),
+        ),
+      );
+      if (!mounted) return;
+      if (module != null) {
+        await _db.insertModule(module);
+        await _loadModules();
+      }
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Nie udało się dodać modułu. Spróbuj ponownie",
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      );
     }
   }
 
@@ -65,93 +93,138 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
     );
     if (!mounted) return;
     if (course != null) {
-      final updated = await _db.updateCourse(course);
-      if (updated == 0) {
-        return;
-      }
-      setState(() {
-        _course = course;
-      });
-      widget.onCourseUpdate(course);
-    }
-  }
-
-  Future<void> _deleteModule(String moduleId) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Usunąć moduł?"),
-          content: Text(
-            "Element zostanie trwale usunięty. Tej operacji nie można cofnąć",
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(
-                "Anuluj",
-                style: TextStyle(fontWeight: FontWeight.bold),
+      try {
+        final updated = await _db.updateCourse(course);
+        if (updated == 0) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Nie udało się zaktualizować kursu.",
+                style: TextStyle(color: Colors.red),
               ),
             ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text("Usuń", style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
-    if (confirmed == true) {
-      await _db.deleteModule(moduleId);
-      if (!mounted) return;
-      await _loadModules();
-    } else {
-      return;
-    }
-  }
-
-  Future<void> _deleteCourse() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Usunąć kurs?"),
-          content: Text(
-            "Element zostanie trwale usunięty. Tej operacji nie można cofnąć",
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(
-                "Anuluj",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text("Usuń", style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
-    if (confirmed == true) {
-      final deleted = await _db.deleteCourse(_course.id);
-      if (!mounted) return;
-      if (!deleted) {
+          );
+          return;
+        }
+        setState(() {
+          _course = course;
+        });
+        widget.onCourseUpdate(course);
+      } catch (error) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              "Nie można usunąć kursu, ponieważ zawiera moduły.",
+              "Wystąpił błąd podczas aktualizacji kursu",
               style: TextStyle(color: Colors.red),
             ),
           ),
         );
-      } else {
-        Navigator.pop(context, true);
       }
-    } else {
-      return;
+    }
+  }
+
+  Future<void> _deleteModule(String moduleId) async {
+    try {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Usunąć moduł?"),
+            content: Text(
+              "Element zostanie trwale usunięty. Tej operacji nie można cofnąć",
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  "Anuluj",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text("Usuń", style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          );
+        },
+      );
+      if (confirmed == true) {
+        await _db.deleteModule(moduleId);
+        if (!mounted) return;
+        await _loadModules();
+      } else {
+        return;
+      }
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Nie udało się usunąć modułu. Spróbuj ponownie",
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _deleteCourse() async {
+    try {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Usunąć kurs?"),
+            content: Text(
+              "Element zostanie trwale usunięty. Tej operacji nie można cofnąć",
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  "Anuluj",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text("Usuń", style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          );
+        },
+      );
+      if (confirmed == true) {
+        final deleted = await _db.deleteCourse(_course.id);
+        if (!mounted) return;
+        if (!deleted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Nie można usunąć kursu, ponieważ zawiera moduły.",
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          );
+        } else {
+          Navigator.pop(context, true);
+        }
+      } else {
+        return;
+      }
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Nie udało się usunąć kursu. Spróbuj ponownie",
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      );
     }
   }
 
@@ -190,6 +263,22 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
               child: Center(
                 child: _isLoading
                     ? CircularProgressIndicator()
+                    : _errorMessage != null
+                    ? Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              _errorMessage.toString(),
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            ElevatedButton(
+                              onPressed: _loadModules,
+                              child: Icon(Icons.refresh),
+                            ),
+                          ],
+                        ),
+                      )
                     : _modules.isEmpty
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -226,11 +315,23 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                     value: _modules[index].isCompleted,
                                     onChanged: (bool? value) async {
                                       if (value == null) return;
-                                      await _db.updateModule(
-                                        _modules[index].id,
-                                        value,
-                                      );
-                                      await _loadModules();
+                                      try {
+                                        await _db.updateModule(
+                                          _modules[index].id,
+                                          value,
+                                        );
+                                        await _loadModules();
+                                      } catch (error) {
+                                        if (!context.mounted) return;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  "Nie udało się zmienić statusu modułu. Spróbuj ponownie.",
+                                                ),
+                                              ),
+                                            );
+                                      }
                                     },
                                   ),
                                   IconButton(

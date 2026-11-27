@@ -59,7 +59,7 @@ class _AddModuleScreenState extends State<AddModuleScreen> {
                       order: order,
                       isCompleted: false,
                     );
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     Navigator.pop(context, newModule);
                   }
                 },
